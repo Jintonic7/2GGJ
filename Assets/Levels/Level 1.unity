@@ -297,6 +297,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   moveSpeed: 5
+  jumpForce: 7
+  groundCheck: {fileID: 1985005086}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerSpeed: 5
+  slideSpeed: 10
+  slideDuration: 1
+  crouchHeight: 0.5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +454,7 @@ GameObject:
   - component: {fileID: 524816011}
   - component: {fileID: 524816010}
   - component: {fileID: 524816009}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +686,7 @@ Transform:
   m_GameObject: {fileID: 1985005085}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.04, y: -1.45, z: 0}
+  m_LocalPosition: {x: -0.12, y: -1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

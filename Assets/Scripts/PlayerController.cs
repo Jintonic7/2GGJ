@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     
     public Rigidbody2D body;
+    public float groundCheckRadius = 0.2f;
+
     PlayerInput playerInput;
 
     // player controls
@@ -72,6 +75,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         moveDirection = move.ReadValue<Vector2>();
+        // Check if the player is grounded using the specified radius
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Debug: Draw the GroundCheck circle in the Scene view to visualize it
+        UnityEngine.Debug.DrawRay(groundCheck.position, Vector2.down * groundCheckRadius, Color.red);
     }
 
     private void FixedUpdate()
@@ -90,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext context)
     {
-        Debug.Log("We Fired!");
+        UnityEngine.Debug.Log("We Fired!");
     }
 
     private void Crouch(InputAction.CallbackContext context)
