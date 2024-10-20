@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     // player controls
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
+    public float holdJumpForce = 5f; // Additional force while holding space
+    public float maxHoldTime = 0.5f; // Max time for holding jump
     public Transform groundCheck;
     public LayerMask groundLayer;
     public PlayerInputActions playerControls;
@@ -34,7 +36,9 @@ public class PlayerMovement : MonoBehaviour
 
 
     // action checks
-    private bool isSliding, isCrouching, isGrounded;
+    private bool isSliding, isCrouching, isGrounded, jumping;
+    private float holdTime;
+
 
     private void Start()
     {
@@ -61,10 +65,11 @@ public class PlayerMovement : MonoBehaviour
 
         jump = playerControls.Player.Jump;
         jump.Enable();
-        jump.performed += Jump;
+        jump.started += StartJump;  // Called when spacebar is first pressed
+        jump.canceled += StopJump;  // Called when spacebar is released
     }
 
-    private void OnDisable()
+        private void OnDisable()
     {
         move.Disable();
         fire.Disable();
@@ -79,6 +84,12 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         // Debug: Draw the GroundCheck circle in the Scene view to visualize it
         UnityEngine.Debug.DrawRay(groundCheck.position, Vector2.down * groundCheckRadius, Color.red);
+
+        if (jumping && holdTime < maxHoldTime) // Add additional force while holding space
+        {
+                holdTime += Time.deltaTime;
+                body.AddForce(new Vector2(0, holdJumpForce * Time.deltaTime), ForceMode2D.Force); // Continuously apply force
+        }
     }
 
     private void FixedUpdate()
@@ -86,18 +97,31 @@ public class PlayerMovement : MonoBehaviour
         body.linearVelocityX = moveDirection.x * playerSpeed;
     }
 
-    private void Jump(InputAction.CallbackContext context)
+    private void StartJump(InputAction.CallbackContext context)
     {
         UnityEngine.Debug.Log("Jump Input Triggered");
         // if player is grounded, add vertical force
         if (isGrounded)
         {
-            body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Apply jump force
-            UnityEngine.Debug.Log("We Jumped!");
+            jumping = true;
+            holdTime = 0f;  // Reset hold time
+            body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);  // Initial jump force
+            UnityEngine.Debug.Log("Jump started!");
+        }
+    }
+    
+    private void StopJump(InputAction.CallbackContext context)
+    {
+        jumping = false; // Stop applying additional force when the spacebar is released
+        UnityEngine.Debug.Log("Jump stopped!");
+
+        if (body.linearVelocity.y > 0)
+        {
+            body.linearVelocity = new Vector2(body.linearVelocity.x, body.linearVelocity.y * 0.5f); // Reduce upward velocity when space is released
         }
     }
 
-    private void Fire(InputAction.CallbackContext context)
+        private void Fire(InputAction.CallbackContext context)
     {
         UnityEngine.Debug.Log("We Fired!");
     }
