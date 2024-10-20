@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     
     public Rigidbody2D body;
-    public float groundCheckRadius = 0.2f;
+    public float groundCheckRadius = 0.1f;
 
     PlayerInput playerInput;
 
@@ -88,10 +88,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext context)
     {
+        UnityEngine.Debug.Log("Jump Input Triggered");
         // if player is grounded, add vertical force
         if (isGrounded)
         {
             body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Apply jump force
+            UnityEngine.Debug.Log("We Jumped!");
         }
     }
 
