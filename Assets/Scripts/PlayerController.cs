@@ -3,15 +3,30 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    
     public Rigidbody2D body;
     PlayerInput playerInput;
-    public float moveSpeed = 5f;
 
+    // player controls
     public PlayerInputActions playerControls;
 
+    // direction vector variable
     Vector2 moveDirection = Vector2.zero;
+
+    // Input action variables
     private InputAction move;
     private InputAction fire;
+    private InputAction crouch;
+
+    // action speeds
+    public float moveSpeed = 5f;
+    public float slideSpeed = 10f;
+    public float slideDuration = 1f;
+    public float crouchHeight = 0.5f;
+
+    // action checks
+    private bool isSliding;
+    private bool isCrouching;
 
     private void Start()
     {
@@ -32,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
         fire.Enable();
         fire.performed += Fire;
 
+        crouch = playerControls.Player.Crouch;
+
     }
 
     private void OnDisable()
@@ -42,11 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //float moveX = Input.GetAxis("Horizontal");
-        //moveDirection = new Vector2(moveX, 0).normalized;
-
         moveDirection = move.ReadValue<Vector2>();
-
     }
 
     private void FixedUpdate()
@@ -58,4 +71,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("We Fired!");
     }
+
+    private void Crouch(InputAction);
 }
