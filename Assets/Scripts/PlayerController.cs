@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput playerInput;
 
     // player controls
+    public float moveSpeed = 5f;
+    public float jumpForce = 7f;
+    public Transform groundCheck;
+    public LayerMask groundLayer;
     public PlayerInputActions playerControls;
 
     // direction vector variable
@@ -23,10 +27,13 @@ public class PlayerMovement : MonoBehaviour
     public float slideSpeed = 10f;
     public float slideDuration = 1f;
     public float crouchHeight = 0.5f;
+    private InputAction jump;
 
     // action checks
     private bool isSliding;
     private bool isCrouching;
+
+    private bool isGrounded;
 
     private void Start()
     {
@@ -49,12 +56,16 @@ public class PlayerMovement : MonoBehaviour
 
         crouch = playerControls.Player.Crouch;
 
+        jump = playerControls.Player.Jump;
+        jump.Enable();
+        jump.performed += jump;
     }
 
     private void OnDisable()
     {
         move.Disable();
         fire.Disable();
+        jump.Disable();
     }
 
     private void Update()
@@ -65,6 +76,14 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         body.linearVelocityX = moveDirection.x * moveSpeed;
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        if (isGrounded)
+        {
+            body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Apply jump force
+        }
     }
 
     private void Fire(InputAction.CallbackContext context)
