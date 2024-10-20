@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     // slide parameters
     public float slideSpeed = 10f;
     public float slideDuration = 1f;
-    public float slideForce = 8f;
+    public float slideForce = 2000f;
     private bool isSliding;
 
     // runs on game start
@@ -153,6 +153,8 @@ public class PlayerMovement : MonoBehaviour
         UnityEngine.Debug.Log("crouched");
         if (isGrounded)
         {
+            body.AddForce(new Vector2(0, slideForce), ForceMode2D.Impulse);
+            /*
             if (isMoving)
             {
                 body.AddForce(new Vector2(slideForce, 0), ForceMode2D.Impulse);
@@ -162,6 +164,7 @@ public class PlayerMovement : MonoBehaviour
             {
 
             }
+            */
         }
     }
 }
