@@ -27,12 +27,17 @@ public class PlayerMovement : MonoBehaviour
     {
         move = playerControls.Player.Move;
         move.Enable();
+
+        fire = playerControls.Player.Fire;
+        fire.Enable();
+        fire.performed += Fire;
+
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
         move.Disable();
+        fire.Disable();
     }
 
     private void Update()
@@ -47,5 +52,10 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         body.linearVelocityX = moveDirection.x * moveSpeed;
+    }
+
+    private void Fire(InputAction.CallbackContext context)
+    {
+        Debug.Log("We Fired!");
     }
 }
