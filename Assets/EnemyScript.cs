@@ -42,9 +42,11 @@ public class Enemy : MonoBehaviour
 
     void TargetPlayer()
     {
-        // Move towards the player's position
-        Vector2 playerPosition = player.transform.position;
-        Vector2 newPosition = Vector2.MoveTowards(rb.position, playerPosition, speed * Time.deltaTime);
+        // Get the player's x position, but keep the enemy's current y position
+        Vector2 targetPosition = new Vector2(player.transform.position.x, rb.position.y);
+
+        // Move only along the x-axis towards the player
+        Vector2 newPosition = Vector2.MoveTowards(rb.position, targetPosition, speed * Time.deltaTime);
         rb.MovePosition(newPosition);
     }
 
