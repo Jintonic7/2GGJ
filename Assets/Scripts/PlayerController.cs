@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     // Input action variables
     private InputAction move;
     private InputAction fire;
-    private InputAction crouch;
+    private InputAction dash;
     private InputAction jump;
 
     // movement parameters
@@ -33,21 +33,8 @@ public class PlayerMovement : MonoBehaviour
     private float jumpHoldTime; //              Float to track length of button press
     private bool jumping; //                    bool to track if jumping
 
-    // crouch parameters
-    public float crouchHeight = 0.5f;//         Height of character when crouching?
-    private bool isCrouching; //                Bool to track crouching
-
-    // slide parameters
-    public float slideInitialForce = 4f; //   initial slide force?
-    //public float slideHoldForce = 0.3f; //        additional force while holding crouch
-    public float slideMaxHoldTime = 1f; //          max time for holding jump
-    public float slideFriction = 5f;
-
-    private float slideDirection;
-    private float slideTimer; //             float to track length of putton press
-    private bool sliding; //                    bool to track if sliding
-    private float currentSlideSpeed;
-    private float slideMovement;
+    // dash parameters
+    public float dashForce;
 
     // runs on game start
     private void Start()
@@ -75,11 +62,9 @@ public class PlayerMovement : MonoBehaviour
 
         // enables crouch
         // retrieves from player controls the input things, stored in crouch
-        crouch = playerControls.Player.Crouch;
-        crouch.Enable();
-        crouch.performed += Crouch;
-        crouch.started += StartSlide;
-        crouch.canceled += StopSlide;
+        dash = playerControls.Player.Dash;
+        dash.Enable();
+        dash.performed += Dash;
 
 
         // enables jump
@@ -95,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         move.Disable();
         fire.Disable();
         jump.Disable();
-        crouch.Disable();
+        dash.Disable();
     }
 
     // updates every frame?
@@ -142,21 +127,11 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // controlls body movement
-        if (sliding && slideTimer >= 0 && isGrounded)
+        if (dashForce > 0)
         {
-            // decrease timer
-            slideTimer -= Time.deltaTime;
-            // apply slide movement
-            currentSlideSpeed = slideInitialForce * (slideTimer / slideMaxHoldTime);
-            //slideMovement = currentSlideSpeed * slideDirection;
-
-            // move the player
-            body.linearVelocityX = moveDirection.x * currentSlideSpeed;
+            dashForce = dashForce - 1;
         }
-        if (!sliding)
-        {
-            body.linearVelocityX = moveDirection.x * playerRunSpeed;
-        }
+        body.linearVelocityX = moveDirection.x * (playerRunSpeed + dashForce);
     }
 
     private void StartJump(InputAction.CallbackContext context)
@@ -180,46 +155,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void StartSlide(InputAction.CallbackContext context)
+    private void Dash(InputAction.CallbackContext context)
     {
-        UnityEngine.Debug.Log("Slide Input Triggered");
-        // if player is grounded, add vertical force
-        if (isGrounded)
-        {
-            // set the slide direction to the charaters forward direction
-            slideDirection = moveDirection.x;
-
-            slideTimer = slideMaxHoldTime;  // Reset hold time
-            sliding = true;
-            // body.AddForce(new Vector2(slideInitialForce, 0), ForceMode2D.Impulse);  // Initial jump force
-            UnityEngine.Debug.Log("Slide started!");
-        }
-    }
-
-    private void StopSlide(InputAction.CallbackContext context)
-    {
-        sliding = false; // Stop applying additional force when the spacebar is released
-        UnityEngine.Debug.Log("Slide stopped!");
-
-        /*
-        if (body.linearVelocity.x > playerRunSpeed)
-        {
-            // Reduce horizontal velocity when space is released
-            body.linearVelocity = new Vector2(body.linearVelocity.x * 0.5f, body.linearVelocity.y);
-        }
-        */
+        dashForce = 10f;
     }
 
     private void Fire(InputAction.CallbackContext context)
     {
         UnityEngine.Debug.Log("We Fired!");
-    }
-
-    private void Crouch(InputAction.CallbackContext context)
-    {
-        if (isGrounded && !isMoving) {
-            UnityEngine.Debug.Log("crouched");
-            // code for crouch animation, slowed speed, lowered hitbox
-        }
     }
 }

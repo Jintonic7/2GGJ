@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Crouch",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "937ac28b-c16a-41a7-ba5f-85b5ef351048",
                     "expectedControlType": "",
@@ -290,7 +290,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Crouch",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
