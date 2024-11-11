@@ -433,7 +433,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &358860326
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7176d660543b149abe2f09a8479fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 0}
+  body: {fileID: 358860325}
   groundCheck: {fileID: 1985005086}
   groundLayer:
     serializedVersion: 2
@@ -1091,7 +1091,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1985005086}
   m_Layer: 0
-  m_Name: GroundCheck\
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
