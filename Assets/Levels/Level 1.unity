@@ -182,10 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f30312006ef8a5d41a7621afaa0293a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  speed: 35
   pointA: {fileID: 4199119}
   pointB: {fileID: 971471852}
-  detectionRange: 5
+  detectionRange: 3
 --- !u!50 &153216603
 Rigidbody2D:
   serializedVersion: 5
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 358860330}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
