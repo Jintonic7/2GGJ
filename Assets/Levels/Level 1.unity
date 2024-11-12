@@ -185,6 +185,7 @@ MonoBehaviour:
   speed: 50
   pointA: {fileID: 4199119}
   pointB: {fileID: 971471852}
+  detectionRange: 5
 --- !u!50 &153216603
 Rigidbody2D:
   serializedVersion: 5
@@ -609,6 +610,7 @@ GameObject:
   - component: {fileID: 358860326}
   - component: {fileID: 358860325}
   - component: {fileID: 358860329}
+  - component: {fileID: 358860330}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -782,10 +784,29 @@ MonoBehaviour:
   jumpInitialForce: 7
   jumpHoldForce: 5
   jumpMaxHoldTime: 0.5
-  crouchHeight: 0.5
-  slideInitialForce: 10
-  slideMaxHoldTime: 2000
-  slideFriction: 5
+  dashForce: 10
+--- !u!95 &358860330
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358860324}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: -7332926538602326831, guid: 0f0df2116c763cc48b9449c7c686a40d, type: 3}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,10 +36,15 @@ public class PlayerMovement : MonoBehaviour
     // dash parameters
     public float dashForce;
 
+    // animation parameters
+    Animator animator;
+    bool isFacingRight = false;
+
     // runs on game start
     private void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+        animator = GetComponent<Animator>();
     }
     // runs on game awake?
     private void Awake()
@@ -64,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         // retrieves from player controls the input things, stored in crouch
         dash = playerControls.Player.Dash;
         dash.Enable();
-        dash.performed += Dash;
+        dash.started += Dash;
 
 
         // enables jump
@@ -105,22 +110,12 @@ public class PlayerMovement : MonoBehaviour
             isMoving = true;
         }
 
-
         if (jumping && jumpHoldTime < jumpMaxHoldTime) // Add additional force while holding space
         {
-                jumpHoldTime += Time.deltaTime;
-                body.AddForce(new Vector2(0, jumpHoldForce * Time.deltaTime), ForceMode2D.Force); // Continuously apply force
+            jumpHoldTime += Time.deltaTime;
+            body.AddForce(new Vector2(0, jumpHoldForce * Time.deltaTime), ForceMode2D.Force); // Continuously apply force
+            animator.SetBool("isJumping", !isGrounded);
         }
-        /*
-        if (sliding && slideHoldTime < slideMaxHoldTime)
-        {
-            slideHoldTime += Time.deltaTime;
-            // add force as long as within time restraint
-            body.AddForce(new Vector2(slideHoldForce * Time.deltaTime, 0), ForceMode2D.Force);
-        }
-        */
-        
-
     }
 
     // Updates more better? for physics stuff
@@ -129,9 +124,24 @@ public class PlayerMovement : MonoBehaviour
         // controlls body movement
         if (dashForce > 0)
         {
-            dashForce = dashForce - 1;
+            dashForce = dashForce - 2f;
+            body.linearVelocityY = 0;
         }
         body.linearVelocityX = moveDirection.x * (playerRunSpeed + dashForce);
+        // animator
+        animator.SetFloat("xVelocity", Mathf.Abs(body.linearVelocity.x));
+        animator.SetFloat("yVelocity", Mathf.Abs(body.linearVelocity.y));
+    }
+
+    void FlipSprite()
+    {
+        if (isFacingRight && moveDirection.x < 0 || !isFacingRight && moveDirection.x > 0)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 ls = transform.localScale;
+            ls.x *= -1f;
+            transform.localScale = ls;
+        }
     }
 
     private void StartJump(InputAction.CallbackContext context)
@@ -157,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash(InputAction.CallbackContext context)
     {
-        dashForce = 10f;
+        dashForce = 20.0f;
     }
 
     private void Fire(InputAction.CallbackContext context)
