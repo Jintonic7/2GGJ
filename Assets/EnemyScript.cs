@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Patrolling:
+                speed = 10;
                 Patrol();
                 break;
 
@@ -47,10 +48,10 @@ public class Enemy : MonoBehaviour
                 {
                     rb.linearVelocity = Vector2.zero; // Stop the Rigidbody's velocity
                     currentState = EnemyState.Attacking;
-                    UnityEngine.Debug.Log("Player in attack range. Switching to Attacking state.");
                 }
                 else
                 {
+                    speed = 25;
                     TargetPlayer();
                 }
                 break;
@@ -59,7 +60,6 @@ public class Enemy : MonoBehaviour
                 if (!IsPlayerInAttackRange())
                 {
                     currentState = EnemyState.Chasing;
-                    UnityEngine.Debug.Log("Player out of attack range. Switching to Chasing state.");
                 }
                 else
                 {
@@ -107,7 +107,6 @@ public class Enemy : MonoBehaviour
     bool IsPlayerInAttackRange()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
-        UnityEngine.Debug.Log($"Distance to Player: {distanceToPlayer}, Attack Range: {attackRange}");
         return distanceToPlayer <= attackRange;
     }
 
