@@ -182,12 +182,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f30312006ef8a5d41a7621afaa0293a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 19
+  speed: 10
   patrolAreaCenter: {x: 15, y: -4.86}
   patrolAreaSize: {x: 27, y: 0}
   detectionRange: 3.5
   attackRange: 1.5
   attackCooldown: 2
+  lostPlayerDelay: 0.5
 --- !u!50 &153216603
 Rigidbody2D:
   serializedVersion: 5
