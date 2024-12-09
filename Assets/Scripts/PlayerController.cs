@@ -95,10 +95,12 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = move.ReadValue<Vector2>();
 
         // Check if the player is grounded using the specified radius
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        //isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         // Debug: Draw the GroundCheck circle in the Scene view to visualize it
         UnityEngine.Debug.DrawRay(groundCheck.position, Vector2.down * groundCheckRadius, Color.red);
+
+        FlipSprite();
 
         // check if moving, set isMoving appropriately
         if (moveDirection.x <= 0 || !jumping)
@@ -114,8 +116,10 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpHoldTime += Time.deltaTime;
             body.AddForce(new Vector2(0, jumpHoldForce * Time.deltaTime), ForceMode2D.Force); // Continuously apply force
+            isGrounded = false;
             animator.SetBool("isJumping", !isGrounded);
         }
+
     }
 
     // Updates more better? for physics stuff
@@ -130,12 +134,12 @@ public class PlayerMovement : MonoBehaviour
         body.linearVelocityX = moveDirection.x * (playerRunSpeed + dashForce);
         // animator
         animator.SetFloat("xVelocity", Mathf.Abs(body.linearVelocity.x));
-        animator.SetFloat("yVelocity", Mathf.Abs(body.linearVelocity.y));
+        animator.SetFloat("yVelocity", (body.linearVelocity.y));
     }
 
     void FlipSprite()
     {
-        if (isFacingRight && moveDirection.x < 0 || !isFacingRight && moveDirection.x > 0)
+        if (isFacingRight && moveDirection.x > 0 || !isFacingRight && moveDirection.x < 0)
         {
             isFacingRight = !isFacingRight;
             Vector3 ls = transform.localScale;
@@ -163,6 +167,12 @@ public class PlayerMovement : MonoBehaviour
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, body.linearVelocity.y * 0.5f); // Reduce upward velocity when space is released
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        isGrounded = true;
+        animator.SetBool("isJumping", !isGrounded);
     }
 
     private void Dash(InputAction.CallbackContext context)
