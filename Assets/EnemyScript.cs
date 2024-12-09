@@ -11,9 +11,9 @@ public class Enemy : MonoBehaviour
     public float detectionRange = 5f; // Detection range for the player
     public float attackRange = 2f; // Range for melee attack
     public float attackCooldown = 2f; // Cooldown between attacks
+    private float lastAttackTime = 0f; // Tracks when the last attack occurred
     private float timeSinceLastSeen = 0f; // Tracks time since player was last in range
     public float lostPlayerDelay = 1f;   // Delay before returning to patrolling
-    private float lastAttackTime = 0f;
     private Vector3 targetPosition;
     private Rigidbody2D rb;
     private GameObject player;
@@ -121,7 +121,11 @@ public class Enemy : MonoBehaviour
     void AttackPlayer()
     {
         rb.linearVelocity = Vector2.zero; // Stop the Rigidbody's velocity
-        MeleeAttack(); // Trigger the attack logic
+        if (Time.time >= lastAttackTime + attackCooldown)
+        {
+            lastAttackTime = Time.time; // Record the time of this attack
+            MeleeAttack(); // Trigger the attack logic
+        }
     }
 
     void Patrol()
